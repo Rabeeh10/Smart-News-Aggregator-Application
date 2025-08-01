@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'news_article_card.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -76,30 +77,42 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _buildHomePage() {
-    return const Center(
+    return SingleChildScrollView(
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(
+          const SizedBox(height: 24),
+          const Icon(
             Icons.newspaper,
             size: 80,
             color: Colors.blue,
           ),
-          SizedBox(height: 16),
-          Text(
+          const SizedBox(height: 16),
+          const Text(
             'Latest News',
             style: TextStyle(
               fontSize: 24,
               fontWeight: FontWeight.bold,
             ),
           ),
-          SizedBox(height: 8),
-          Text(
+          const SizedBox(height: 8),
+          const Text(
             'Stay updated with the latest news',
             style: TextStyle(
               fontSize: 16,
               color: Colors.grey,
             ),
+          ),
+          const SizedBox(height: 24),
+          // Sample NewsArticleCard
+          NewsArticleCard(
+            imageUrl: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb',
+            title: 'Flutter 3.0 Released: What’s New?',
+            source: 'TechCrunch',
+          ),
+          NewsArticleCard(
+            imageUrl: 'https://images.unsplash.com/photo-1519125323398-675f0ddb6308',
+            title: 'AI Revolutionizes News Aggregation',
+            source: 'Wired',
           ),
         ],
       ),
