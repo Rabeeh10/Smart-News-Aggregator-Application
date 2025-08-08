@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'home_page.dart';
+import 'login_screen.dart';
 
 void main() {
   runApp(const SmartNewsApp());
@@ -20,7 +20,7 @@ class SmartNewsApp extends StatelessWidget {
         ),
         useMaterial3: true,
       ),
-      home: const HomePage(),
+      home: const LoginScreen(),
     );
   }
 }
