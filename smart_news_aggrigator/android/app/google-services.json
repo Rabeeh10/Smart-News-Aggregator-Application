@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1010168420800",
+    "project_id": "smart-news-aggrigator",
+    "storage_bucket": "smart-news-aggrigator.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1010168420800:android:ef14441ff67ee9e0e49025",
+        "android_client_info": {
+          "package_name": "com.example.smart_news_aggrigator"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBHlqWNC_om8KGg_vXiqPbGXt_s6R_A_w8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

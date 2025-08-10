@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'auth_service.dart';
+import 'registration_screen.dart';
+import 'home_page.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -31,7 +33,11 @@ class _LoginScreenState extends State<LoginScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Login successful!')),
         );
-        // Optionally, navigate to another screen here
+        // Navigate to home page on successful login
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const HomePage()),
+        );
       } catch (e) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Login failed: \n${e.toString()}')),
@@ -132,9 +138,14 @@ class _LoginScreenState extends State<LoginScreen> {
                 const SizedBox(height: 16),
                 TextButton(
                   onPressed: () {
-                    // TODO: Navigate to registration screen
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const RegistrationScreen(),
+                      ),
+                    );
                   },
-                  child: const Text('Don\'t have an account? Register'),
+                  child: const Text("Don't have an account? Register"),
                 ),
                 const SizedBox(height: 32),
               ],

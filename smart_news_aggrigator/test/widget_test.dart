@@ -11,20 +11,12 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:smart_news_aggrigator/main.dart';
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
+  testWidgets('Login screen test', (WidgetTester tester) async {
     // Build our app and trigger a frame.
-    await tester.pumpWidget(const MyApp());
+    await tester.pumpWidget(const SmartNewsApp());
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
-
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
-
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+    // Verify that we have a login screen
+    expect(find.text('Smart News Aggregator'), findsOneWidget);
+    expect(find.text('Login'), findsOneWidget);
   });
 }

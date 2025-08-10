@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'news_article_card.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'edit_profile_screen.dart';
+import 'login_screen.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -77,42 +79,30 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _buildHomePage() {
-    return SingleChildScrollView(
+    return const Center(
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const SizedBox(height: 24),
-          const Icon(
+          Icon(
             Icons.newspaper,
             size: 80,
             color: Colors.blue,
           ),
-          const SizedBox(height: 16),
-          const Text(
+          SizedBox(height: 16),
+          Text(
             'Latest News',
             style: TextStyle(
               fontSize: 24,
               fontWeight: FontWeight.bold,
             ),
           ),
-          const SizedBox(height: 8),
-          const Text(
+          SizedBox(height: 8),
+          Text(
             'Stay updated with the latest news',
             style: TextStyle(
               fontSize: 16,
               color: Colors.grey,
             ),
-          ),
-          const SizedBox(height: 24),
-          // Sample NewsArticleCard
-          NewsArticleCard(
-            imageUrl: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb',
-            title: 'Flutter 3.0 Released: What’s New?',
-            source: 'TechCrunch',
-          ),
-          NewsArticleCard(
-            imageUrl: 'https://images.unsplash.com/photo-1519125323398-675f0ddb6308',
-            title: 'AI Revolutionizes News Aggregation',
-            source: 'Wired',
           ),
         ],
       ),
@@ -182,33 +172,186 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _buildProfilePage() {
-    return const Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(
-            Icons.person,
-            size: 80,
-            color: Colors.purple,
-          ),
-          SizedBox(height: 16),
-          Text(
-            'User Profile',
-            style: TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
+    return Scaffold(
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const SizedBox(height: 20),
+            // Profile Header
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                color: Colors.blue.shade50,
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(color: Colors.blue.shade200),
+              ),
+              child: Column(
+                children: [
+                  const CircleAvatar(
+                    radius: 50,
+                    backgroundColor: Colors.blue,
+                    child: Icon(
+                      Icons.person,
+                      size: 50,
+                      color: Colors.white,
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  Text(
+                    FirebaseAuth.instance.currentUser?.email ?? 'User',
+                    style: const TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    'Member since ${_formatDate(FirebaseAuth.instance.currentUser?.metadata.creationTime)}',
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: Colors.grey.shade600,
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
-          SizedBox(height: 8),
-          Text(
-            'Manage your account settings',
-            style: TextStyle(
-              fontSize: 16,
-              color: Colors.grey,
+            
+            const SizedBox(height: 30),
+            
+            // Profile Actions
+            const Text(
+              'Account',
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              ),
             ),
-          ),
-        ],
+            const SizedBox(height: 16),
+            
+            _buildProfileItem(
+              icon: Icons.edit,
+              title: 'Edit Profile',
+              subtitle: 'Update your personal information',
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const EditProfileScreen(),
+                  ),
+                );
+              },
+            ),
+            
+            _buildProfileItem(
+              icon: Icons.security,
+              title: 'Privacy & Security',
+              subtitle: 'Manage your account security',
+              onTap: () {
+                // TODO: Navigate to privacy settings
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Coming soon!')),
+                );
+              },
+            ),
+            
+            _buildProfileItem(
+              icon: Icons.notifications,
+              title: 'Notifications',
+              subtitle: 'Configure your notification preferences',
+              onTap: () {
+                // TODO: Navigate to notification settings
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Coming soon!')),
+                );
+              },
+            ),
+            
+            _buildProfileItem(
+              icon: Icons.help,
+              title: 'Help & Support',
+              subtitle: 'Get help and contact support',
+              onTap: () {
+                // TODO: Navigate to help section
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Coming soon!')),
+                );
+              },
+            ),
+            
+            const SizedBox(height: 30),
+            
+            // Sign Out Button
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                onPressed: () async {
+                  try {
+                    await FirebaseAuth.instance.signOut();
+                    Navigator.of(context).pushAndRemoveUntil(
+                      MaterialPageRoute(builder: (context) => const LoginScreen()),
+                      (route) => false,
+                    );
+                  } catch (e) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('Error signing out: $e')),
+                    );
+                  }
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.red,
+                  foregroundColor: Colors.white,
+                  padding: const EdgeInsets.symmetric(vertical: 16),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                ),
+                child: const Text(
+                  'Sign Out',
+                  style: TextStyle(fontSize: 16),
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
+  }
+  
+  Widget _buildProfileItem({
+    required IconData icon,
+    required String title,
+    required String subtitle,
+    required VoidCallback onTap,
+  }) {
+    return Card(
+      elevation: 2,
+      margin: const EdgeInsets.only(bottom: 12),
+      child: ListTile(
+        leading: CircleAvatar(
+          backgroundColor: Colors.blue.shade100,
+          child: Icon(
+            icon,
+            color: Colors.blue.shade700,
+          ),
+        ),
+        title: Text(
+          title,
+          style: const TextStyle(
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+        subtitle: Text(subtitle),
+        trailing: const Icon(Icons.arrow_forward_ios, size: 16),
+        onTap: onTap,
+      ),
+    );
+  }
+  
+  String _formatDate(DateTime? date) {
+    if (date == null) return 'Unknown';
+    return '${date.day}/${date.month}/${date.year}';
   }
 }
