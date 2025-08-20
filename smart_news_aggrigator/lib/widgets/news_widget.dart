@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../models/article.dart';
 import '../services/news_api_service.dart';
-import '../news_article_card.dart';
+import '../enhanced_news_article_card.dart';
 
 class NewsWidget extends StatefulWidget {
   final String searchQuery;
@@ -173,7 +173,7 @@ class _NewsWidgetState extends State<NewsWidget> {
           final article = _articles[index];
           return Padding(
             padding: const EdgeInsets.only(bottom: 8.0),
-            child: NewsArticleCard(article: article),
+            child: EnhancedNewsArticleCard(article: article),
           );
         },
       ),

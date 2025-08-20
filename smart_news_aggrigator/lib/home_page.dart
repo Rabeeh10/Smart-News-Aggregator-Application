@@ -4,6 +4,7 @@ import 'edit_profile_screen.dart';
 import 'login_screen.dart';
 import 'widgets/news_widget.dart';
 import 'widgets/categories_widget.dart';
+import 'screens/saved_articles_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -69,7 +70,13 @@ class _HomePageState extends State<HomePage> {
             onCategorySelected: _onCategorySelected,
             onClearCategory: _onClearCategory,
           ),
-          _buildSavedPage(),
+          SavedArticlesPage(
+            onBrowseNews: () {
+              setState(() {
+                _currentIndex = 0; // Switch to Home tab
+              });
+            },
+          ),
           _buildProfilePage(),
         ],
       ),
@@ -218,37 +225,6 @@ class _HomePageState extends State<HomePage> {
               searchQuery: _currentSearchQuery,
               selectedCategory: _selectedCategory,
               onRefresh: _onRefresh,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildSavedPage() {
-    return const Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(
-            Icons.bookmark,
-            size: 80,
-            color: Colors.green,
-          ),
-          SizedBox(height: 16),
-          Text(
-            'Saved Articles',
-            style: TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          SizedBox(height: 8),
-          Text(
-            'Your bookmarked articles will appear here',
-            style: TextStyle(
-              fontSize: 16,
-              color: Colors.grey,
             ),
           ),
         ],

@@ -62,11 +62,17 @@ class DatabaseHelper {
         'savedAt': DateTime.now().toIso8601String(),
       };
       
-      return await db.insert(
+      print('Saving article: ${article.title}');
+      print('Article URL: ${article.url}');
+      
+      final result = await db.insert(
         'saved_articles',
         articleMap,
         conflictAlgorithm: ConflictAlgorithm.replace,
       );
+      
+      print('Article saved successfully with ID: $result');
+      return result;
     } catch (e) {
       print('Error saving article: $e');
       return -1;
@@ -83,6 +89,8 @@ class DatabaseHelper {
         orderBy: 'savedAt DESC', // Most recently saved first
       );
 
+      print('Retrieved ${maps.length} saved articles from database');
+      
       return List.generate(maps.length, (i) {
         return Article(
           title: maps[i]['title'] ?? 'No Title',
