@@ -1,0 +1,74 @@
+@startuml
+' DFD Level 2 - Tidy Version
+
+actor User
+entity "Auth (D1)"
+entity "Articles (D2)"
+entity "Prefs (D3)"
+entity "NewsAPI"
+entity "Firestore"
+
+rectangle System {
+  rectangle "Authenticate" as P1 {
+    rectangle "Validate" as P11
+    rectangle "Session" as P12
+    rectangle "Account" as P13
+    rectangle "Errors" as P14
+  }
+  rectangle "Fetch News" as P2 {
+    rectangle "Parse" as P21
+    rectangle "API Request" as P22
+    rectangle "Filter" as P23
+    rectangle "Format" as P24
+    rectangle "Errors" as P25
+  }
+  rectangle "Save Article" as P3 {
+    rectangle "Validate" as P31
+    rectangle "Check Duplicates" as P32
+    rectangle "Prepare" as P33
+    rectangle "DB Op" as P34
+    rectangle "Feedback" as P35
+  }
+  rectangle "Rate/Prefs" as P4 {
+    rectangle "Validate" as P41
+    rectangle "Check Prefs" as P42
+    rectangle "Update" as P43
+    rectangle "Sync" as P44
+    rectangle "Recommend" as P45
+  }
+}
+
+User --> P11 : Credentials
+P11 --> P12 : Validated
+P12 --> P13 : Session
+P13 --> "Auth (D1)" : Account
+P13 --> P14 : Status
+P14 --> User : Result
+
+User --> P21 : News Req
+P21 --> P22 : Params
+P22 --> "NewsAPI" : API
+P22 --> P23 : Data
+P23 --> P24 : Filtered
+P24 --> User : Articles
+P25 --> User : Errors
+
+User --> P31 : Save Req
+P31 --> P32 : Validated
+P32 --> "Articles (D2)" : Query
+P32 --> P33 : Status
+P33 --> P34 : Prepared
+P34 --> "Articles (D2)" : Store
+P34 --> P35 : Result
+P35 --> User : Feedback
+
+User --> P41 : Rate/Prefs
+P41 --> P42 : Validated
+P42 --> "Prefs (D3)" : Query
+P42 --> P43 : Data
+P43 --> P44 : Updated
+P44 --> "Firestore" : Sync
+P44 --> P45 : Status
+P45 --> User : Recommend
+
+@enduml

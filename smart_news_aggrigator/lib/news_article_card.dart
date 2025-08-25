@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'models/article.dart';
+import 'screens/article_detail_screen.dart';
 
 class NewsArticleCard extends StatelessWidget {
   final Article article;
@@ -10,11 +10,14 @@ class NewsArticleCard extends StatelessWidget {
     required this.article,
   });
 
-  Future<void> _launchUrl() async {
-    final Uri url = Uri.parse(article.url);
-    if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
-      throw Exception('Could not launch ${article.url}');
-    }
+  void _launchUrl(BuildContext context) {
+    // Navigate to article detail screen instead of external browser
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => ArticleDetailScreen(article: article),
+      ),
+    );
   }
 
   @override
@@ -23,7 +26,7 @@ class NewsArticleCard extends StatelessWidget {
       margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
       elevation: 2,
       child: InkWell(
-        onTap: _launchUrl,
+        onTap: () => _launchUrl(context),
         borderRadius: BorderRadius.circular(8),
         child: Padding(
           padding: const EdgeInsets.all(12.0),

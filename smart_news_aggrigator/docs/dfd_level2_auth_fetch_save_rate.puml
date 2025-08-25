@@ -1,0 +1,81 @@
+@startuml
+' DFD Level 2 - Decomposition of Key Processes
+
+actor User
+entity "Firebase Auth (D1)" as D1
+entity "Saved Articles (D2)" as D2
+entity "User Prefs & Ratings (D3)" as D3
+entity "NewsAPI.org" as NewsAPI
+entity "Firebase Firestore" as Firestore
+
+' 1.0 Authenticate User
+rectangle "1.0 Authenticate User" {
+  rectangle "1.1 Validate Credentials" as P11
+  rectangle "1.2 Create/Update Session" as P12
+  rectangle "1.3 Manage User Account" as P13
+  rectangle "1.4 Handle Auth Errors" as P14
+}
+User --> P11 : Credentials
+P11 --> P12 : Validated Data
+P12 --> P13 : Session Data
+P13 --> D1 : Account Ops
+D1 --> P13 : Account Data
+P13 --> P14 : Status/Error
+P14 --> User : Auth Result
+
+' 2.0 Fetch News Articles
+rectangle "2.0 Fetch News Articles" {
+  rectangle "2.1 Parse Request Params" as P21
+  rectangle "2.2 Construct API Request" as P22
+  rectangle "2.3 Process & Filter Data" as P23
+  rectangle "2.4 Format for Display" as P24
+  rectangle "2.5 Handle API Errors" as P25
+}
+User --> P21 : News Request
+P21 --> P22 : Params
+P22 --> NewsAPI : API Call
+NewsAPI --> P22 : Response
+P22 --> P23 : API Data
+P23 --> P24 : Filtered Data
+P24 --> User : Articles
+P25 --> User : API Errors
+
+' 4.0 Save Article Offline
+rectangle "4.0 Save Article Offline" {
+  rectangle "4.1 Validate Article" as P41
+  rectangle "4.2 Check for Duplicates" as P42
+  rectangle "4.3 Prepare Article Data" as P43
+  rectangle "4.4 Execute DB Operation" as P44
+  rectangle "4.5 Provide Feedback" as P45
+}
+User --> P41 : Save Request
+P41 --> P42 : Validated Article
+P42 --> D2 : Query
+D2 --> P42 : Exists?
+P42 --> P43 : Status
+P43 --> P44 : Prepared Data
+P44 --> D2 : Insert/Update
+D2 --> P44 : Result
+P44 --> P45 : Op Result
+P45 --> User : Save Status
+
+' 5.0 Rate/Prefer Articles
+rectangle "5.0 Rate/Prefer Articles" {
+  rectangle "5.1 Validate Rating Data" as P51
+  rectangle "5.2 Check Existing Prefs" as P52
+  rectangle "5.3 Update Pref Data" as P53
+  rectangle "5.4 Sync to Cloud Storage" as P54
+  rectangle "5.5 Generate Recommendations" as P55
+}
+User --> P51 : Rating/Prefs
+P51 --> P52 : Validated Data
+P52 --> D3 : Query
+D3 --> P52 : Prefs
+P52 --> P53 : Existing Data
+P53 --> P54 : Updated Prefs
+P54 --> Firestore : Sync
+Firestore --> P54 : Sync Result
+P54 --> P55 : Status
+P55 --> User : Recommendations
+
+@enduml

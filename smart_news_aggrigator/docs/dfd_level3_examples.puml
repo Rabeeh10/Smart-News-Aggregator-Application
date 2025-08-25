@@ -1,0 +1,51 @@
+@startuml
+' DFD Level 3 - Example: 2.2 Construct API Request
+
+actor "Process 2.1" as P21
+entity "NewsAPI.org" as NewsAPI
+
+rectangle "2.2 Construct API Request" {
+  rectangle "2.2.1 Build Base URL" as P221
+  rectangle "2.2.2 Add Query Params" as P222
+  rectangle "2.2.3 Add API Key & Headers" as P223
+  rectangle "2.2.4 Validate Request" as P224
+  rectangle "2.2.5 Execute HTTP Request" as P225
+  rectangle "2.2.6 Handle Response" as P226
+}
+
+P21 --> P221 : Parsed Params
+P221 --> P222 : Base URL
+P222 --> P223 : URL+Params
+P223 --> P224 : Request Config
+P224 --> P225 : Validated Request
+P225 --> NewsAPI : HTTP GET
+NewsAPI --> P225 : API Response
+P225 --> P226 : Response Data
+P226 --> "Process 2.3" : Data
+
+' DFD Level 3 - Example: 4.4 Execute Database Operation
+actor "Process 4.3" as P43
+entity "Saved Articles (D2)" as D2
+
+rectangle "4.4 Execute DB Operation" {
+  rectangle "4.4.1 Open DB Connection" as P441
+  rectangle "4.4.2 Begin Transaction" as P442
+  rectangle "4.4.3 Prepare SQL Statement" as P443
+  rectangle "4.4.4 Execute SQL Operation" as P444
+  rectangle "4.4.5 Validate Result" as P445
+  rectangle "4.4.6 Commit/Rollback" as P446
+  rectangle "4.4.7 Close Connection" as P447
+}
+
+P43 --> P441 : Prepared Data
+P441 --> P442 : DB Conn
+P442 --> P443 : Txn Ctx
+P443 --> P444 : SQL
+P444 --> D2 : SQL Exec
+D2 --> P444 : Result
+P444 --> P445 : Exec Result
+P445 --> P446 : Validated
+P446 --> P447 : Final Result
+P447 --> "Process 4.5" : Op Result
+
+@enduml

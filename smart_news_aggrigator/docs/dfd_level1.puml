@@ -1,0 +1,34 @@
+@startuml
+' DFD Level 1 - Major Processes (Tidy)
+
+actor User
+entity "Auth (D1)"
+entity "Articles (D2)"
+entity "Prefs (D3)"
+entity "Categories (D4)"
+entity "NewsAPI"
+
+rectangle System {
+  rectangle "Authenticate" as P1
+  rectangle "Fetch News" as P2
+  rectangle "Save Article" as P3
+  rectangle "Rate/Prefs" as P4
+}
+
+User --> P1 : Login/Register
+P1 --> "Auth (D1)" : Auth
+P1 --> User : Status
+
+User --> P2 : Request News
+P2 --> NewsAPI : API Call
+P2 --> User : Articles
+
+User --> P3 : Save
+P3 --> "Articles (D2)" : Store
+P3 --> User : Saved
+
+User --> P4 : Rate/Prefs
+P4 --> "Prefs (D3)" : Update
+P4 --> User : Confirmation
+
+@enduml

@@ -1,0 +1,12 @@
+@startuml
+' DFD Level 0 - Context Diagram (Minimal)
+
+actor User
+entity NewsAPI
+entity Firebase
+
+User -- "Smart News Aggregator System" : uses
+"Smart News Aggregator System" -- NewsAPI : fetches news
+"Smart News Aggregator System" -- Firebase : authenticates & syncs
+
+@enduml

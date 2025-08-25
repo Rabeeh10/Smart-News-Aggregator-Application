@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'models/article.dart';
 import 'helpers/database_helper.dart';
+import 'screens/article_detail_screen.dart';
 
 class EnhancedNewsArticleCard extends StatefulWidget {
   final Article article;
@@ -42,10 +42,13 @@ class _EnhancedNewsArticleCardState extends State<EnhancedNewsArticleCard> {
   }
 
   Future<void> _launchUrl() async {
-    final Uri url = Uri.parse(widget.article.url);
-    if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
-      throw Exception('Could not launch ${widget.article.url}');
-    }
+    // Navigate to article detail screen instead of external browser
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => ArticleDetailScreen(article: widget.article),
+      ),
+    );
   }
 
   Future<void> _toggleSaveArticle() async {

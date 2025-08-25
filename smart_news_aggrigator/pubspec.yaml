@@ -46,6 +46,9 @@ dependencies:
   # SQLite dependencies
   sqflite: ^2.4.0
   path: ^1.9.0
+  
+  # Text-to-Speech dependency
+  flutter_tts: ^4.0.2
 
 dev_dependencies:
   flutter_test:

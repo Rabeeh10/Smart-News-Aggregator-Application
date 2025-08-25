@@ -1,0 +1,65 @@
+@startuml
+' DFD Level 3 - Tidy Version
+
+actor User
+entity "NewsAPI"
+entity "Articles (D2)"
+entity "Firestore"
+
+rectangle System {
+  rectangle "API Request" as P1 {
+    rectangle "Build URL" as P11
+    rectangle "Add Params" as P12
+    rectangle "Add Key" as P13
+    rectangle "Validate" as P14
+    rectangle "Execute" as P15
+    rectangle "Handle Resp" as P16
+  }
+  rectangle "DB Operation" as P2 {
+    rectangle "Open Conn" as P21
+    rectangle "Begin Txn" as P22
+    rectangle "Prepare SQL" as P23
+    rectangle "Exec SQL" as P24
+    rectangle "Validate" as P25
+    rectangle "Commit/Rollback" as P26
+    rectangle "Close Conn" as P27
+  }
+  rectangle "Cloud Sync" as P3 {
+    rectangle "Auth" as P31
+    rectangle "Prepare Doc" as P32
+    rectangle "Check Conflict" as P33
+    rectangle "Sync" as P34
+    rectangle "Handle Resp" as P35
+    rectangle "Log/Notify" as P36
+  }
+}
+
+User --> P11 : Params
+P11 --> P12 : URL
+P12 --> P13 : Params
+P13 --> P14 : Key
+P14 --> P15 : Validated
+P15 --> "NewsAPI" : GET
+P15 --> P16 : Resp
+P16 --> User : Data
+
+User --> P21 : Data
+P21 --> P22 : Conn
+P22 --> P23 : Txn
+P23 --> P24 : SQL
+P24 --> "Articles (D2)" : Exec
+P24 --> P25 : Result
+P25 --> P26 : Validated
+P26 --> P27 : Status
+P27 --> User : Done
+
+User --> P31 : Prefs
+P31 --> P32 : Auth
+P32 --> P33 : Doc
+P33 --> P34 : Conflict
+P34 --> "Firestore" : Sync
+P34 --> P35 : Resp
+P35 --> P36 : Status
+P36 --> User : Notify
+
+@enduml
